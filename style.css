@@ -1,0 +1,31 @@
+#uv{
+    border-radius: 6px;
+    padding: 3px;
+    width: fit-content;
+}
+
+.safe{
+    background-color: lightgreen;
+    color: black;
+}
+
+.moderate{
+    background-color: yellow;
+    color: black;
+}
+
+.high{
+    background-color: orange;
+    color: white;
+}
+
+.v-high{
+    background-color: red;
+    color: white;
+}
+
+.extreme{
+    background-color: rebeccapurple;
+    color: white;
+}
+
