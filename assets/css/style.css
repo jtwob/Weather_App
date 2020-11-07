@@ -1,9 +1,12 @@
+
+/* fitting uv box to uv data */
 #uv{
     border-radius: 6px;
     padding: 3px;
     width: fit-content;
 }
 
+/* beginning of uv spectrum */
 .safe{
     background-color: lightgreen;
     color: black;
@@ -29,12 +32,14 @@
     color: white;
 }
 
+/* forecast card style */
 .card-days{
     color: white;
     background-color: mediumblue;
     border-radius: 6px;
 }
 
+/* history element hover color */
 .hover{
     background-color: skyblue;
 }

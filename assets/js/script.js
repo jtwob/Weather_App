@@ -1,7 +1,10 @@
 $(document).ready(function () {
+    //Declaration of globals
     let searchValues = 0;
+    //Meant to hide result panel until 1 query has been made
     $("#city-banner").toggle();
 
+    //form listener for searchbar and search history
     $("form").on("submit", function (e) {
         e.preventDefault();
         let searchEntry = $("<li>");
@@ -20,20 +23,27 @@ $(document).ready(function () {
         fetchHelper(input);
     });
 
+    //grabs search from search history element and executes
     $("#search-history").on("click", ".history-item", function () {
         fetchHelper(this.textContent);
     })
 
+    //mouseover/hover coloration of search history element
     $("#search-history").mouseover(function (e) {
         $(".hover").removeClass("hover");
         $(e.target).addClass("hover");
         return false;
     })
 
+    //removes hover coloration on mouseout
     $("#search-history").mouseout(function (e) {
         $(e.target).removeClass("hover");
     });
 
+    /**
+     * Update city is a parser that adds + symbols in place of spaces, for url management
+     * @param {String} query The query city/country
+     */
     let updateCity = function (query) {
         let words = query.split(" ");
         let city = "";
@@ -46,6 +56,10 @@ $(document).ready(function () {
         return city;
     }
 
+    /**
+     * Fetch function for today's weather data. Populates html with relevant data
+     * @param {String} query The query city/country
+     */
     let fetchWeather = function (query) {
         let searchWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + updateCity(query) + "&units=imperial&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
         fetch(searchWeather)
@@ -57,10 +71,12 @@ $(document).ready(function () {
                 $("#humidity").text("Humidity: " + data.main.humidity + "%");
                 $("#wind").text("Wind Speed: " + data.wind.speed + "mph");
             })
-
-
     }
 
+    /**
+     * Fetch function for 5 day forecast. Populates html with relevant data. Also calls fetchUV function as the coordinates supplied from the forecast are required.
+     * @param {String} query The query city/country
+     */
     let fetchForecast = function (query) {
         let timeSetter;
         let searchForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + updateCity(query) + "&units=imperial&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
@@ -82,6 +98,11 @@ $(document).ready(function () {
             })
     }
 
+    /**
+     * Fetch function for UV index data. Populates html with relevant data, colorizes UV index based on severity. Called in fetchForecast wher lat and lon are retrieved.
+     * @param {String} lat the latitude of the UV data
+     * @param {String} lon the longitude of the UV data
+     */
     let fetchUV = function (lat, lon) {
         let searchUV = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
         fetch(searchUV)
@@ -102,11 +123,19 @@ $(document).ready(function () {
             })
     }
 
+    /**
+     * Helper function calls all fetch functions
+     * @param {String} query The query city/country
+     */
     let fetchHelper = function (query) {
         fetchWeather(query);
         fetchForecast(query);
     }
 
+    /**
+     * cardCreator is passed one object from a specific timestamp to create and populate a card with the relevant data, and append to the html
+     * @param {Object} data individual timestamp returned from the openweather api
+     */
     let cardCreator = function (data) {
         let iconcode = data.weather[0].icon;
 
@@ -135,6 +164,10 @@ $(document).ready(function () {
         $("#card-row").append(card);
     }
 
+    /**
+     * capitalize normalizes search strings for city/country capitalization conventions 
+     * @param {String} str search term
+     */
     let capitalize = function (str) {
         let arr = str.split(" ");
         let result = "";
