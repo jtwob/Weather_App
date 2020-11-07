@@ -17,15 +17,11 @@ $(document).ready(function () {
             $("#search-history").prepend(searchEntry);
             searchValues++;
         }
-        fillBanner(input);
-        let q = updateCity(input);
-        console.log(q)
+        fetchHelper(input);
     });
 
     $("#search-history").on("click", ".history-item", function () {
-        fillBanner(this.textContent);
-        let reSearch = updateCity(this.textContent);
-        console.log(reSearch);
+        fetchHelper(this.textContent);
     })
 
     let updateCity = function (query) {
@@ -40,43 +36,65 @@ $(document).ready(function () {
         return city;
     }
 
-    let fillBanner = function (query) {
-
-        let searchQ = "https://api.openweathermap.org/data/2.5/forecast?q=" + updateCity(query) + "&units=imperial&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
-        fetch(searchQ)
+    let fetchWeather = function (query) {
+        let searchWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + updateCity(query) + "&units=imperial&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
+        fetch(searchWeather)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                let date = moment(data.list[4].dt_txt).subtract(1, 'days').format("L");
-
+                let date = moment(data.dt * 1000).format("L");
                 $("#city-text").text(query + " " + date);
-                $("#temp").text("Temperature: " + data.list[4].main.temp + " °F");
-                $("#humidity").text("Humidity: " + data.list[4].main.humidity + "%");
-                $("#wind").text("Wind Speed: " + data.list[4].wind.speed + "mph");
+                $("#temp").text("Temperature: " + data.main.temp + " °F");
+                $("#humidity").text("Humidity: " + data.main.humidity + "%");
+                $("#wind").text("Wind Speed: " + data.wind.speed + "mph");
+            })
 
-                let searchUV = "https://api.openweathermap.org/data/2.5/uvi?lat=" + data.city.coord.lat + "&lon=" + data.city.coord.lon + "&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
-                fetch(searchUV)
-                    .then(response => response.json())
-                    .then(data => {
-                        $("#uv").text(data.value);
-                        if (data.value <= 2) {
-                            $("#uv").attr("class", "safe");
-                        } else if (data.value <= 5) {
-                            $("#uv").attr("class", "moderate");
-                        } else if (data.value <= 7) {
-                            $("#uv").attr("class", "high");
-                        } else if (data.value <= 10) {
-                            $("#uv").attr("class", "v-high");
-                        } else if (data.value > 10) {
-                            $("#uv").attr("class", "extreme");
-                        }
-                        console.log(data);
-                    })
+
+    }
+
+    let fetchForecast = function (query) {
+        let timeSetter;
+        let searchForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + updateCity(query) + "&units=imperial&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
+        fetch(searchForecast)
+            .then(response => response.json())
+            .then(data => {
+                fetchUV(data.city.coord.lat, data.city.coord.lon);
                 $("#card-row").empty();
-                for (let i = 6; i < data.list.length; i += 8) {
+                for (let i = 0; i < 8; i++) {
+                    let time = moment(data.list[i].dt_txt).utcOffset(8).toString();
+                    timeArr = time.split(" ");
+                    if (timeArr[4] === "13:00:00") {
+                        timeSetter = i;
+                    }
+                }
+                for (let i = timeSetter; i < data.list.length; i += 8) {
                     cardCreator(data.list[i]);
                 }
             })
+    }
+
+    let fetchUV = function (lat, lon) {
+        let searchUV = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
+        fetch(searchUV)
+            .then(response => response.json())
+            .then(data => {
+                $("#uv").text(data.value);
+                if (data.value <= 2) {
+                    $("#uv").attr("class", "safe");
+                } else if (data.value <= 5) {
+                    $("#uv").attr("class", "moderate");
+                } else if (data.value <= 7) {
+                    $("#uv").attr("class", "high");
+                } else if (data.value <= 10) {
+                    $("#uv").attr("class", "v-high");
+                } else if (data.value > 10) {
+                    $("#uv").attr("class", "extreme");
+                }
+            })
+    }
+
+    let fetchHelper = function (query) {
+        fetchWeather(query);
+        fetchForecast(query);
     }
 
     let cardCreator = function (data) {
@@ -97,7 +115,7 @@ $(document).ready(function () {
 
         cardHeader.text(moment(data.dt_txt).format("L"));
         cardTemp.text("Temp: " + data.main.temp + " °F");
-        cardHum.text("Humidity:" + data.main.humidity + "%");
+        cardHum.text("Humidity: " + data.main.humidity + "%");
 
         cardBody.append(cardHeader);
         cardBody.append(cardIcon);
