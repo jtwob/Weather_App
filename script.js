@@ -13,7 +13,7 @@ $(document).ready(function () {
         if (input !== "") {
             searchEntry.attr("class", "list-group-item history-item");
             searchEntry.attr("data-value", searchValues);
-            searchEntry.text(input);
+            searchEntry.text(capitalize(input));
             $("#search-history").prepend(searchEntry);
             searchValues++;
         }
@@ -52,7 +52,7 @@ $(document).ready(function () {
             .then(response => response.json())
             .then(data => {
                 let date = moment(data.dt * 1000).format("L");
-                $("#city-text").text(query + " " + date);
+                $("#city-text").text(capitalize(query) + " " + date);
                 $("#temp").text("Temperature: " + data.main.temp + " °F");
                 $("#humidity").text("Humidity: " + data.main.humidity + "%");
                 $("#wind").text("Wind Speed: " + data.wind.speed + "mph");
@@ -135,4 +135,22 @@ $(document).ready(function () {
         $("#card-row").append(card);
     }
 
+    let capitalize = function (str) {
+        let arr = str.split(" ");
+        let result = "";
+        for (let i = 0; i < arr.length; i++) {
+            let size = arr[i].length;
+            for (let j = 0; j < size; j++) {
+                if (j === 0) {
+                    result += arr[i][j].toUpperCase();
+                } else {
+                    result += arr[i][j].toLowerCase();
+                }
+            }
+            if (i + 1 !== arr.length) {
+                result += " ";
+            }
+        }
+        return result;
+    }
 })
