@@ -24,6 +24,16 @@ $(document).ready(function () {
         fetchHelper(this.textContent);
     })
 
+    $("#search-history").mouseover(function (e) {
+        $(".hover").removeClass("hover");
+        $(e.target).addClass("hover");
+        return false;
+    })
+
+    $("#search-history").mouseout(function (e) {
+        $(e.target).removeClass("hover");
+    });
+
     let updateCity = function (query) {
         let words = query.split(" ");
         let city = "";
