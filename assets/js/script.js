@@ -67,6 +67,7 @@ $(document).ready(function () {
             .then(data => {
                 let date = moment(data.dt * 1000).format("L");
                 $("#city-text").text(capitalize(query) + " " + date);
+                $("#today-icon").attr("src", "https://openweathermap.org/img/w/" + data.weather[0].icon + ".png");
                 $("#temp").text("Temperature: " + data.main.temp + " °F");
                 $("#humidity").text("Humidity: " + data.main.humidity + "%");
                 $("#wind").text("Wind Speed: " + data.wind.speed + "mph");
