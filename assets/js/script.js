@@ -147,7 +147,7 @@ $(document).ready(function () {
         let cardHum = $("<p>");
 
         card.attr("style", "width: 10rem; margin-right: 4px;");
-        card.addClass("card");
+        card.addClass("card card-outer");
         cardBody.addClass("card-body card-days");
         cardHeader.addClass("card-title");
         cardIcon.attr("src", "https://openweathermap.org/img/w/" + iconcode + ".png");

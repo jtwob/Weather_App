@@ -1,3 +1,10 @@
+body{
+    background-image: url(../images/bg-image.png);
+}
+
+.button-addon2{
+    background-color: rgba(112, 128, 144, 0.822);
+}
 
 /* fitting uv box to uv data */
 #uv{
@@ -33,9 +40,14 @@
 }
 
 /* forecast card style */
+.card-outer{
+    background-color: transparent;
+    border: transparent;
+}
+
 .card-days{
     color: white;
-    background-color: mediumblue;
+    background-color: rgba(0, 0, 205, 0.192);
     border-radius: 6px;
 }
 

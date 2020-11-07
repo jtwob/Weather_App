@@ -6,6 +6,6 @@ This app features a search bar with interactive history elements that can be use
 today's weather. This app also includes a simplified five day forecast, with date, weather icon, temperature, and humidity.
 
 ## Diagram
-![example](./assets/example.png)
+![example](./assets/images/example.png)
 
 [Link to live app](https://jtwob.github.io/Weather_App/)
