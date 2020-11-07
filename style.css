@@ -29,3 +29,8 @@
     color: white;
 }
 
+.card-days{
+    color: white;
+    background-color: mediumblue;
+    border-radius: 6px;
+}
