@@ -54,7 +54,7 @@ $(document).ready(function () {
                 $("#humidity").text("Humidity: " + data.list[4].main.humidity + "%");
                 $("#wind").text("Wind Speed: " + data.list[4].wind.speed + "mph");
 
-                let searchUV = "http://api.openweathermap.org/data/2.5/uvi?lat=" + data.city.coord.lat + "&lon=" + data.city.coord.lon + "&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
+                let searchUV = "https://api.openweathermap.org/data/2.5/uvi?lat=" + data.city.coord.lat + "&lon=" + data.city.coord.lon + "&appid=b8cf73639b0d81c1905ba1ac1cb6f289";
                 fetch(searchUV)
                     .then(response => response.json())
                     .then(data => {
@@ -93,7 +93,7 @@ $(document).ready(function () {
         card.addClass("card");
         cardBody.addClass("card-body card-days");
         cardHeader.addClass("card-title");
-        cardIcon.attr("src", "http://openweathermap.org/img/w/" + iconcode + ".png");
+        cardIcon.attr("src", "https://openweathermap.org/img/w/" + iconcode + ".png");
 
         cardHeader.text(moment(data.dt_txt).format("L"));
         cardTemp.text("Temp: " + data.main.temp + " °F");
